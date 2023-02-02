@@ -11,7 +11,9 @@
   <name>pgn-parser</name>
 
   <properties>
-    <antlr4.version>4.2</antlr4.version>
+    <antlr4.version>4.11.1</antlr4.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -69,6 +71,7 @@
           <mainClass>nl.bigo.pp.Main</mainClass>
         </configuration>
       </plugin>
+
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

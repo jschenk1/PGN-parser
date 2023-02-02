@@ -77,14 +77,14 @@ tag_value
  
 /// <movetext-section> ::= <element-sequence> <game-termination>
 movetext_section
- : element_sequence game_termination
+ : comment_before? element_sequence game_termination
  ;
 
 /// <element-sequence> ::= <element> <element-sequence>
 ///                        <recursive-variation> <element-sequence>
 ///                        <empty>
 element_sequence
- : (element | recursive_variation)*
+ : (move | recursive_variation)*
  ;
 
 /// <element> ::= <move-number-indication>
@@ -95,9 +95,13 @@ element
  | san_move
  | NUMERIC_ANNOTATION_GLYPH
  ;
+ 
+move
+ : move_number_indication? san_move SUFFIX_ANNOTATION? NUMERIC_ANNOTATION_GLYPH* comment?
+ ;
 
 move_number_indication
- : INTEGER PERIOD?
+ : INTEGER PERIOD? PERIOD? PERIOD?
  ;
 
 san_move
@@ -106,8 +110,17 @@ san_move
 
 /// <recursive-variation> ::= ( <element-sequence> )
 recursive_variation
- : LEFT_PARENTHESIS element_sequence RIGHT_PARENTHESIS
+ : LEFT_PARENTHESIS comment_before? element_sequence RIGHT_PARENTHESIS comment?
  ;
+ 
+comment
+ : BRACE_COMMENT
+ ;
+ 
+comment_before
+ : BRACE_COMMENT
+ ;
+  
 
 /// <game-termination> ::= 1-0
 ///                        0-1
@@ -146,8 +159,9 @@ REST_OF_LINE_COMMENT
 /// brace comment loses its special meaning and is ignored.  Braces appearing
 /// inside of a semicolon comments lose their special meaning and are ignored.
 BRACE_COMMENT
- : '{' ~'}'* '}' -> skip
+ : '{' ~'}'* '}'
  ;
+
 
 /// There is a special escape mechanism for PGN data.  This mechanism is triggered
 /// by a percent sign character ("%") appearing in the first column of a line; the
